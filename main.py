@@ -68,6 +68,11 @@ def profile():
     return render_template('profile.html')
 
 
+@app.route('/receipts')
+def receipts():
+    return redirect(url_for())
+
+
 if __name__ == '__main__':
     db.create_all()
     app.run(debug=True)
