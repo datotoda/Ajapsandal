@@ -40,15 +40,9 @@ def index():
     return render_template('home.html')
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
-
-
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-        # user = request.
-        # session['user'] = user
         return redirect(url_for('profile'))
 
     return render_template('login.html')
@@ -56,4 +50,20 @@ def login():
 
 @app.route('/logout')
 def logout():
-    pass
+    return render_template('logout.html')
+
+
+@app.route('/signup', methods=['POST', 'GET'])
+def registration():
+    if request.method == 'POST':
+        return redirect(url_for('profile'))
+    return render_template('registration.html')
+
+
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
