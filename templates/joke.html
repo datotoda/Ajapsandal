@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ super() }} - Joke
+{% endblock %}
+
+{% block context %}
+
+    <img src="https://api.chucknorris.io/img/chucknorris_logo_coloured_small.png">
+    <p>{{ joke.id }}</p>
+    <p>{{ joke.value }}</p>
+    <p>{{ joke.comments }}</p>
+{% endblock %}
