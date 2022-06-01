@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ super() }} - Recipes
+{% endblock %}
+
+{% block context %}
+
+<div class="row">
+{%for each in recipes%}
+
+  <div class="col-sm-3 mb-5">
+    <div class="card" style="width: 18rem;">
+      <img src="{{each['image']}}" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title"> {{each['title']}} </h5>
+        <a href="{{each['spoonacularSourceUrl']}}" class="btn btn-primary">recipe</a>
+      </div>
+    </div>
+  </div>
+
+
+{% endfor %}
+</div>
+
+
+<div class="row">
+
+{% for i in range(16)%}
+  <div class="col-sm-3 mb-5">
+  <div class="card" style="width: 18rem;">
+    <img src="..." class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">Card title</h5>
+      <a href="#" class="btn btn-primary">recipe</a>
+    </div>
+  </div>
+ </div>
+
+
+{% endfor %}
+</div>
+{% endblock %}
+

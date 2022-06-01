@@ -4,6 +4,7 @@ import json
 
 
 def get_receipts(query):
+    return []
     # task 3
     # spoonacular.com-იდან API-ს მეშვეობით მომაქვს ჩემთვის სასურველი კერძის რეცეპტი.
     key = '15d3f9db070e4b7980dd731441e1b04f'
@@ -21,7 +22,11 @@ def get_receipts(query):
     payload = {'apiKey': key, 'ids': ids}
 
     r2 = requests.get(f'https://api.spoonacular.com/recipes/informationBulk', params=payload)
-    return json.loads(r2.text)
+    res2 = json.loads(r2.text)
+    return res2
+
+    # title = res2[0]['title']
+    # print(title)
 
     # title = res['results'][0]['title']
     # fat = res['results'][0]['nutrition']['nutrients'][0]['amount']

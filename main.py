@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from apis import chucknorris
+from apis import chucknorris, spoonacular
 
 app = Flask(__name__)
 app.secret_key = 'text'
@@ -87,9 +87,11 @@ def profile():
     return render_template('profile.html')
 
 
-@app.route('/receipts')
-def receipts():
-    return redirect(url_for())
+@app.route('/recipes')
+def recipes():
+    food_name = request.args.get('query', '')
+    foods = spoonacular.get_receipts(food_name)
+    return render_template('recipes.html', recipes=foods)
 
 
 @app.route('/joke/<string:joke_id>')
