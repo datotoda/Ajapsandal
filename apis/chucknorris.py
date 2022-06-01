@@ -6,7 +6,7 @@ URL_BASE = 'https://api.chucknorris.io/jokes/'
 
 
 def get_random():
-    url = URL_BASE + 'random'
+    url = URL_BASE + 'random?category=food'
     result = requests.get(url).json()
     result.pop('categories')
 
