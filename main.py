@@ -94,6 +94,12 @@ def recipes():
     return render_template('recipes.html', recipes=foods)
 
 
+@app.route('/jokes')
+def jokes():
+    jokes_list = Joke.query.all()
+    return render_template('jokes.html', jokes=jokes_list)
+
+
 @app.route('/joke/<string:joke_id>')
 def joke(joke_id):
     joke_obj = Joke.query.filter_by(id=joke_id).first()

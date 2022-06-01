@@ -6,8 +6,36 @@
 
 {% block context %}
 
-    <img src="https://api.chucknorris.io/img/chucknorris_logo_coloured_small.png">
-    <p>{{ joke.id }}</p>
-    <p>{{ joke.value }}</p>
-    <p>{{ joke.comments }}</p>
+    <div class="mt-5 d-flex justify-content-center ">
+        <img src="https://api.chucknorris.io/img/chucknorris_logo_coloured_small.png">
+    </div>
+    <div class="d-flex justify-content-center">
+        <div class="p-3">
+            <p class="fw-bold h4">Joke id: {{ joke.id }}</p>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <div class="p-4">
+            <p>{{ joke.value }}</p>
+        </div>
+    </div>
+    <h2>Comments</h2>
+    {% if joke.comments|count != 0 %}
+        <div class="list-group mt-4">
+            {% for comment in joke.comments %}
+                <div class="list-group-item d-flex align-items-start">
+                    <div class="ms-2 me-auto">
+                        <a href="#" class="fw-bold link-dark">{{ comment.author }}</a>
+                        <div class="mt-2 mb-3">{{ comment.value }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+
+
+
+
 {% endblock %}
