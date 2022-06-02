@@ -4,7 +4,7 @@ import json
 
 
 def get_receipts(query):
-    return []
+    # return []
     # task 3
     # spoonacular.com-იდან API-ს მეშვეობით მომაქვს ჩემთვის სასურველი კერძის რეცეპტი.
     key = '15d3f9db070e4b7980dd731441e1b04f'

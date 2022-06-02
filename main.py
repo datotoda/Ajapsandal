@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from apis import chucknorris, spoonacular
@@ -65,6 +65,8 @@ def index():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
+        username = request.form['username']
+        session['username'] = username
         return redirect(url_for('profile'))
 
     return render_template('login.html')
@@ -72,6 +74,7 @@ def login():
 
 @app.route('/logout')
 def logout():
+    session.pop('username', None)
     return render_template('logout.html')
 
 
