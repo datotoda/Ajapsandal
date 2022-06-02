@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from apis import chucknorris, spoonacular
@@ -64,9 +64,31 @@ def index():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+    if 'user_id' in session:
+        return redirect(url_for('profile'))
+
     if request.method == 'POST':
-        username = request.form['username']
-        session['username'] = username
+        username = request.form.get('username', '')
+        password = request.form.get('password', '')
+
+        if not username:
+            flash('Input username', 'u_err')
+        if not password:
+            flash('Input password', 'p_err')
+        if not (username and password):
+            return render_template('login.html', username=username)
+
+        user = User.query.filter_by(username=username).first()
+
+        if not user:
+            flash('Incorrect username', 'u_err')
+            return redirect(url_for('login'))
+
+        if user.password != password:
+            flash('Incorrect password', 'p_err')
+            return render_template('login.html', username=username)
+
+        session['user_id'] = user.id
         return redirect(url_for('profile'))
 
     return render_template('login.html')
@@ -74,12 +96,15 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.pop('username', None)
-    return render_template('logout.html')
+    session.pop('user_id', None)
+    return redirect(url_for('login'))
 
 
 @app.route('/signup', methods=['POST', 'GET'])
 def registration():
+    if 'user_id' in session:
+        return redirect(url_for('profile'))
+
     if request.method == 'POST':
         return redirect(url_for('profile'))
     return render_template('registration.html')
@@ -87,6 +112,8 @@ def registration():
 
 @app.route('/profile')
 def profile():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
     return render_template('profile.html')
 
 
