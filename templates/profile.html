@@ -5,92 +5,126 @@
 {% endblock %}
 
 {% block context %}
-    <form class="mt-5" method="post">
-        <div class="mb-3 row">
-            <label for="username" class="col-sm-2 col-form-label">Username</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control{% if not edit %}-plaintext{% endif %}"
-                       id="username" {% if not edit %}readonly{% endif %}
-                       value="{{ user.username }}" name="username">
-                {% for category, message in get_flashed_messages(with_categories=true) %}
-                    {% if category == 'username_err' %}
-                        <div class="text-danger pt-2">{{ message }}</div>
-                    {% endif %}
+    <div class="col-8 mx-auto">
+
+        {% if is_editable and not edit %}
+            <form class="mt-4 mb-5" method="get">
+                <div class="row g-3">
+                    <div class="col">
+                        <p class="h2">Hello {{ user.username }}</p>
+                    </div>
+                    <div class="col-auto">
+                        <input type="hidden" name="edit" value="True">
+                        <button type="submit" class="btn btn-outline-warning">Edit</button>
+                    </div>
+                </div>
+            </form>
+        {% endif %}
+
+        <form class="mt-5" method="post">
+            <div class="mb-3 row">
+                <label for="username" class="col-sm-2 col-form-label">Username</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control{% if not edit %}-plaintext{% endif %}"
+                           id="username" {% if not edit %}readonly{% endif %}
+                           value="{{ user.username }}" name="username">
+                    {% for category, message in get_flashed_messages(with_categories=true) %}
+                        {% if category == 'username_err' %}
+                            <div class="text-danger pt-2">{{ message }}</div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="first_name" class="col-sm-2 col-form-label">First name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control{% if not edit %}-plaintext{% endif %}"
+                           id="first_name" {% if not edit %}readonly{% endif %}
+                           value="{% if user.first_name %}{{ user.first_name }}{% endif %}"
+                           name="first_name">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="last_name" class="col-sm-2 col-form-label">Last name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control{% if not edit %}-plaintext{% endif %}"
+                           id="last_name" {% if not edit %}readonly{% endif %}
+                           value="{% if user.last_name %}{{ user.last_name }}{% endif %}"
+                           name="last_name">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="email" class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                    <input type="email" class="form-control{% if not edit %}-plaintext{% endif %}"
+                           id="email" {% if not edit %}readonly{% endif %}
+                           value="{% if user.email %}{{ user.email }}{% endif %}"
+                           name="email">
+                    {% for category, message in get_flashed_messages(with_categories=true) %}
+                        {% if category == 'email_err' %}
+                            <div class="text-danger pt-2">{{ message }}</div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% if edit %}
+                <div class="mb-3 row">
+                    <label for="old_password" class="col-sm-2 col-form-label">Old Password</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control"
+                               id="old_password" name="old_password">
+                        {% for category, message in get_flashed_messages(with_categories=true) %}
+                            {% if category == 'old_pass_err' %}
+                                <div class="text-danger pt-2">{{ message }}</div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="new_password" class="col-sm-2 col-form-label">New Password</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control"
+                               id="new_password" name="new_password">
+                        {% for category, message in get_flashed_messages(with_categories=true) %}
+                            {% if category == 'new_pass_err' %}
+                                <div class="text-danger pt-2">{{ message }}</div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="conf_password" class="col-sm-2 col-form-label">Confirm New Password</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control"
+                               id="conf_password" name="conf_password">
+                        {% for category, message in get_flashed_messages(with_categories=true) %}
+                            {% if category == 'conf_pass_err' %}
+                                <div class="text-danger pt-2">{{ message }}</div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <button class="col-auto ms-auto me-2 btn btn-outline-success" type="submit">Save</button>
+                </div>
+            {% endif %}
+        </form>
+
+        {% if not edit %}
+            <p class="h2 mt-5">Recent comments</p>
+
+            <div class="list-group mt-4">
+                {% for comment in user.comments[:-5:-1] %}
+                    <div class="list-group-item d-flex align-items-start">
+                        <div class="ms-2 me-auto">
+                            <a href="{{ url_for('joke', joke_id=comment.joke.id) }}"
+                               class="fw-bold link-dark">{{ comment.joke.value }}</a>
+                            <div class="mt-2 mb-3">{{ comment.value }}</div>
+                        </div>
+                    </div>
                 {% endfor %}
-            </div>
-        </div>
-        <div class="mb-3 row">
-            <label for="first_name" class="col-sm-2 col-form-label">First name</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control{% if not edit %}-plaintext{% endif %}"
-                       id="first_name" {% if not edit %}readonly{% endif %}
-                       value="{% if user.first_name %}{{ user.first_name }}{% endif %}"
-                       name="first_name">
-            </div>
-        </div>
-        <div class="mb-3 row">
-            <label for="last_name" class="col-sm-2 col-form-label">Last name</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control{% if not edit %}-plaintext{% endif %}"
-                       id="last_name" {% if not edit %}readonly{% endif %}
-                       value="{% if user.last_name %}{{ user.last_name }}{% endif %}"
-                       name="last_name">
-            </div>
-        </div>
-        <div class="mb-3 row">
-            <label for="email" class="col-sm-2 col-form-label">Email</label>
-            <div class="col-sm-10">
-                <input type="email" class="form-control{% if not edit %}-plaintext{% endif %}"
-                       id="email" {% if not edit %}readonly{% endif %}
-                       value="{% if user.email %}{{ user.email }}{% endif %}"
-                       name="email">
-                {% for category, message in get_flashed_messages(with_categories=true) %}
-                    {% if category == 'email_err' %}
-                        <div class="text-danger pt-2">{{ message }}</div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-        {% if edit %}
-            <div class="mb-3 row">
-                <label for="old_password" class="col-sm-2 col-form-label">Old Password</label>
-                <div class="col-sm-10">
-                    <input type="password" class="form-control"
-                           id="old_password" name="old_password">
-                    {% for category, message in get_flashed_messages(with_categories=true) %}
-                        {% if category == 'old_pass_err' %}
-                            <div class="text-danger pt-2">{{ message }}</div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="new_password" class="col-sm-2 col-form-label">New Password</label>
-                <div class="col-sm-10">
-                    <input type="password" class="form-control"
-                           id="new_password" name="new_password">
-                    {% for category, message in get_flashed_messages(with_categories=true) %}
-                        {% if category == 'new_pass_err' %}
-                            <div class="text-danger pt-2">{{ message }}</div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="conf_password" class="col-sm-2 col-form-label">Confirm New Password</label>
-                <div class="col-sm-10">
-                    <input type="password" class="form-control"
-                           id="conf_password" name="conf_password">
-                    {% for category, message in get_flashed_messages(with_categories=true) %}
-                        {% if category == 'conf_pass_err' %}
-                            <div class="text-danger pt-2">{{ message }}</div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <button class="col-auto ms-auto me-2 btn btn-outline-success" type="submit">Save</button>
             </div>
         {% endif %}
-    </form>
+
+    </div>
 {% endblock %}

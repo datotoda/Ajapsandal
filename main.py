@@ -156,7 +156,7 @@ class UserMethodView(MethodView):
         if request.args.get('edit', ''):
             edit = is_editable
 
-        return render_template('profile.html', user=user, edit=edit)
+        return render_template('profile.html', user=user, is_editable=is_editable, edit=edit)
 
     def post(self, user_id):
         if user_id != session.get('user_id', ''):
