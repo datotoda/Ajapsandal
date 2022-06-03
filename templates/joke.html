@@ -24,11 +24,27 @@
             {% for comment in joke.comments %}
                 <div class="list-group-item d-flex align-items-start">
                     <div class="ms-2 me-auto">
-                        <a href="{{ url_for('profile', user_id=comment.author.id) }}" class="fw-bold link-dark">{{ comment.author }}</a>
+                        <a href="{{ url_for('profile', user_id=comment.author.id) }}"
+                           class="fw-bold link-dark">{{ comment.author.username }}</a>
                         <div class="mt-2 mb-3">{{ comment.value }}</div>
                     </div>
                 </div>
             {% endfor %}
         </div>
+    {% endif %}
+
+    {% if user %}
+
+        <form class="mt-4 mb-5" method="post">
+            <label class="row g-3">
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Write a comment . . . " name="comment">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </label>
+        </form>
+
     {% endif %}
 {% endblock %}

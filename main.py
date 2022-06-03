@@ -139,13 +139,11 @@ class UserMethodView(MethodView):
         else:
             user.username = username
 
-        if f_name:
-            user.first_name = f_name
-        if l_name:
-            user.last_name = l_name
+        user.first_name = f_name
+        user.last_name = l_name
 
         if email:
-            if email.count('@') != 1 or email.split('@')[-1].count('.') != 1:
+            if email.count('@') != 1 or email.split('@')[-1].count('.') == 0:
                 flash('Incorrect email', 'email_err')
             else:
                 user.email = email
@@ -184,12 +182,21 @@ def jokes():
     return render_template('jokes.html', jokes=jokes_list)
 
 
-@app.route('/joke/<string:joke_id>')
+@app.route('/joke/<string:joke_id>', methods=['GET', 'POST'])
 def joke(joke_id):
     joke_obj = Joke.query.filter_by(id=joke_id).first()
-    if joke_obj:
-        return render_template('joke.html', joke=joke_obj)
-    return 'error 404'
+    user = User.query.filter_by(id=session.get('user_id', '')).first()
+    if not joke_obj:
+        return 'error 404'
+
+    if request.method == 'POST':
+        comment = request.form.get('comment', '')
+        if user and comment:
+            new_comment = Comment(value=comment, user_id=user.id, joke_id=joke_obj.id)
+            db.session.add(new_comment)
+            db.session.commit()
+
+    return render_template('joke.html', joke=joke_obj, user=user)
 
 
 @app.route('/newjoke')
