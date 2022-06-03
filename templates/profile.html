@@ -9,8 +9,8 @@
         <div class="mb-3 row">
             <label for="username" class="col-sm-2 col-form-label">Username</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control{% if not is_editable %}-plaintext{% endif %}"
-                       id="username" {% if not is_editable %}readonly{% endif %}
+                <input type="text" class="form-control{% if not edit %}-plaintext{% endif %}"
+                       id="username" {% if not edit %}readonly{% endif %}
                        value="{{ user.username }}" name="username">
                 {% for category, message in get_flashed_messages(with_categories=true) %}
                     {% if category == 'username_err' %}
@@ -22,8 +22,8 @@
         <div class="mb-3 row">
             <label for="first_name" class="col-sm-2 col-form-label">First name</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control{% if not is_editable %}-plaintext{% endif %}"
-                       id="first_name" {% if not is_editable %}readonly{% endif %}
+                <input type="text" class="form-control{% if not edit %}-plaintext{% endif %}"
+                       id="first_name" {% if not edit %}readonly{% endif %}
                        value="{% if user.first_name %}{{ user.first_name }}{% endif %}"
                        name="first_name">
             </div>
@@ -31,8 +31,8 @@
         <div class="mb-3 row">
             <label for="last_name" class="col-sm-2 col-form-label">Last name</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control{% if not is_editable %}-plaintext{% endif %}"
-                       id="last_name" {% if not is_editable %}readonly{% endif %}
+                <input type="text" class="form-control{% if not edit %}-plaintext{% endif %}"
+                       id="last_name" {% if not edit %}readonly{% endif %}
                        value="{% if user.last_name %}{{ user.last_name }}{% endif %}"
                        name="last_name">
             </div>
@@ -40,8 +40,8 @@
         <div class="mb-3 row">
             <label for="email" class="col-sm-2 col-form-label">Email</label>
             <div class="col-sm-10">
-                <input type="email" class="form-control{% if not is_editable %}-plaintext{% endif %}"
-                       id="email" {% if not is_editable %}readonly{% endif %}
+                <input type="email" class="form-control{% if not edit %}-plaintext{% endif %}"
+                       id="email" {% if not edit %}readonly{% endif %}
                        value="{% if user.email %}{{ user.email }}{% endif %}"
                        name="email">
                 {% for category, message in get_flashed_messages(with_categories=true) %}
@@ -51,7 +51,7 @@
                 {% endfor %}
             </div>
         </div>
-        {% if is_editable %}
+        {% if edit %}
             <div class="mb-3 row">
                 <label for="old_password" class="col-sm-2 col-form-label">Old Password</label>
                 <div class="col-sm-10">

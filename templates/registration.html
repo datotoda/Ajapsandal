@@ -21,7 +21,7 @@
                                 <label class="form-label" for="username">Username</label>
                                 <input type="text" id="username" name="username" value="{{ username }}" class="form-control form-control-lg"/>
                                 {% for category, message in get_flashed_messages(with_categories=true) %}
-                                    {% if category == 'u_err' %}
+                                    {% if category == 'username_err' %}
                                         <div class="text-danger pt-2">{{ message }}</div>
                                     {% endif %}
                                 {% endfor %}
@@ -29,14 +29,14 @@
 
                             <div class="form-outline mb-4">
                                 <label class="form-label" for="username">First name</label>
-                                <input type="text" id="name" name="name" value="{{ name }}" class="form-control form-control-lg"/>
+                                <input type="text" id="name" name="first_name" value="{{ name }}" class="form-control form-control-lg"/>
 
                             </div>
 
 
                             <div class="form-outline mb-4">
                                 <label class="form-label" for="username">Last name</label>
-                                <input type="text" id="lastname" name="username" value="{{ lastname }}" class="form-control form-control-lg"/>
+                                <input type="text" id="lastname" name="last_name" value="{{ lastname }}" class="form-control form-control-lg"/>
 
                             </div>
 
@@ -51,18 +51,18 @@
                                 <input type="password" id="password" name="password"
                                        class="form-control form-control-lg"/>
                                 {% for category, message in get_flashed_messages(with_categories=true) %}
-                                    {% if category == 'p_err' %}
+                                    {% if category == 'password_err' %}
                                         <div class="text-danger pt-2">{{ message }}</div>
                                     {% endif %}
                                 {% endfor %}
                             </div>
 
                             <div class="form-outline mb-4">
-                                <label class="form-label" for="password">Repeat Password</label>
-                                <input type="password" id="repeat password" name="password"
+                                <label class="form-label" for="repeat_password">Repeat Password</label>
+                                <input type="password" id="repeat_password" name="repeat_password"
                                        class="form-control form-control-lg"/>
                                 {% for category, message in get_flashed_messages(with_categories=true) %}
-                                    {% if category == 'p_err' %}
+                                    {% if category == 'repeat_password_err' %}
                                         <div class="text-danger pt-2">{{ message }}</div>
                                     {% endif %}
                                 {% endfor %}

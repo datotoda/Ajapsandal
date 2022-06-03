@@ -1,4 +1,3 @@
-# task 1
 import requests
 import json
 
@@ -22,10 +21,8 @@ def get_receipts(query):
         res2 = json.loads(r2.text)
         return res2
     except Exception:
-        pass
-
-    with open('apis/default_recipes.json', 'r') as f:
-        return json.load(f)
+        with open('apis/default_recipes.json', 'r') as f:
+            return json.load(f)
 
 
 if __name__ == '__main__':

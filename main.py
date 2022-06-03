@@ -95,36 +95,6 @@ def login():
     return render_template('login.html')
 
 
-@app.route('/signUp')
-def signUp():
-    if request.method == 'POST':
-
-        username = request.form.get('username', '')
-        firstname = request.form.get('firstname', '')
-        lastname = request.form.get('lastname', '')
-        email = request.form.get('email', '')
-        password = request.form.get('password', '')
-        repeatPassword = request.form.get('repeatPassword', '')
-
-        if not username:
-            flash('Input username', 'username_err')
-        if not password:
-            flash('Input password', 'password_err')
-        if not (username and password):
-            return render_template('registration.html', username=username)
-
-        user = User.query.filter_by(username=username).first()
-        if username == user.username:
-            flash('username already exists', 'username_err')
-        if repeatPassword != user.password:
-            flash('Incorrect password', 'password_err')
-
-        user = User(username=username, first_name=firstname, last_name=lastname, email=email,password=password)
-        db.session.add(user)
-        db.session.commit()
-        return redirect(url_for('profile', user_id=user.id))
-
-
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
@@ -134,10 +104,39 @@ def logout():
 @app.route('/signup', methods=['POST', 'GET'])
 def registration():
     if 'user_id' in session:
-        return redirect(url_for('profile'))
+        return redirect(url_for('profile', user_id=session['user_id']))
 
     if request.method == 'POST':
-        return redirect(url_for('profile'))
+        username = request.form.get('username', '')
+        firstname = request.form.get('first_name', '')
+        lastname = request.form.get('last_name', '')
+        email = request.form.get('email', '')
+        password = request.form.get('password', '')
+        repeat_password = request.form.get('repeat_password', '')
+
+        if not username:
+            flash('Input username', 'username_err')
+        if not password:
+            flash('Input password', 'password_err')
+        if not (username and password):
+            return render_template('registration.html', username=username)
+
+        if User.query.filter_by(username=username).first():
+            flash('username already exists', 'username_err')
+            return render_template('registration.html')
+        if len(password) < 8:
+            flash('Password must be at least 8 characters long', 'password_err')
+            return render_template('registration.html', username=username)
+        if repeat_password != password:
+            flash('Passwords not match', 'repeat_password_err')
+            return render_template('registration.html', username=username)
+
+        user = User(username=username, first_name=firstname, last_name=lastname, email=email, password=password)
+        db.session.add(user)
+        db.session.commit()
+        session['user_id'] = user.id
+        return redirect(url_for('profile', user_id=user.id))
+
     return render_template('registration.html')
 
 
@@ -150,7 +149,13 @@ class UserMethodView(MethodView):
         if not user:
             abort(404)
 
-        return render_template('profile.html', user=user, is_editable=user.id == session.get('user_id', ''))
+        is_editable = user.id == session.get('user_id', '')
+
+        edit = False
+        if request.args.get('edit', ''):
+            edit = is_editable
+
+        return render_template('profile.html', user=user, edit=edit)
 
     def post(self, user_id):
         if user_id != session.get('user_id', ''):
