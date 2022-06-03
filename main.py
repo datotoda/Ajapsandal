@@ -108,31 +108,35 @@ def registration():
         return redirect(url_for('profile', user_id=session['user_id']))
 
     if request.method == 'POST':
-        username = request.form.get('username', '')
-        firstname = request.form.get('first_name', '')
-        lastname = request.form.get('last_name', '')
-        email = request.form.get('email', '')
-        password = request.form.get('password', '')
-        repeat_password = request.form.get('repeat_password', '')
+        data = {
+            'username': request.form.get('username', '').strip(),
+            'first_name': request.form.get('first_name', '').strip(),
+            'last_name': request.form.get('last_name', '').strip(),
+            'email': request.form.get('email', '').strip(),
+            'password': request.form.get('password', ''),
+            'repeat_password': request.form.get('repeat_password', '')
+        }
 
-        if not username:
+        if not data['username']:
             flash('Input username', 'username_err')
-        if not password:
+        if not data['password']:
             flash('Input password', 'password_err')
-        if not (username and password):
-            return render_template('registration.html', username=username)
+        if not (data['username'] and data['password']):
+            return render_template('registration.html', **data)
 
-        if User.query.filter_by(username=username).first():
+        if User.query.filter_by(username=data['username']).first():
             flash('username already exists', 'username_err')
-            return render_template('registration.html')
-        if len(password) < 8:
+            data.pop('username')
+            return render_template('registration.html', **data)
+        if len(data['password']) < 8:
             flash('Password must be at least 8 characters long', 'password_err')
-            return render_template('registration.html', username=username)
-        if repeat_password != password:
+            return render_template('registration.html', **data)
+        if data['repeat_password'] != data['password']:
             flash('Passwords not match', 'repeat_password_err')
-            return render_template('registration.html', username=username)
+            return render_template('registration.html', **data)
 
-        user = User(username=username, first_name=firstname, last_name=lastname, email=email, password=password)
+        data.pop('repeat_password')
+        user = User(**data)
         db.session.add(user)
         db.session.commit()
         session['user_id'] = user.id
