@@ -60,7 +60,8 @@ class User(db.Model):
 
 @app.route('/')
 def index():
-    return render_template('home.html')
+    foods = spoonacular.get_offline_receipts(30)
+    return render_template('recipes.html', recipes=foods)
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -207,7 +208,10 @@ app.add_url_rule('/profile/<int:user_id>', view_func=UserMethodView.as_view('pro
 @app.route('/recipes')
 def recipes():
     food_name = request.args.get('query', '')
-    foods = spoonacular.get_receipts(food_name)
+    if food_name:
+        foods = spoonacular.get_receipts(food_name)
+    else:
+        foods = spoonacular.get_offline_receipts()
     return render_template('recipes.html', recipes=foods)
 
 
