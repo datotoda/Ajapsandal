@@ -95,6 +95,36 @@ def login():
     return render_template('login.html')
 
 
+@app.route('/signUp')
+def signUp():
+    if request.method == 'POST':
+
+        username = request.form.get('username', '')
+        firstname = request.form.get('firstname', '')
+        lastname = request.form.get('lastname', '')
+        email = request.form.get('email', '')
+        password = request.form.get('password', '')
+        repeatPassword = request.form.get('repeatPassword', '')
+
+        if not username:
+            flash('Input username', 'username_err')
+        if not password:
+            flash('Input password', 'password_err')
+        if not (username and password):
+            return render_template('registration.html', username=username)
+
+        user = User.query.filter_by(username=username).first()
+        if username == user.username:
+            flash('username already exists', 'username_err')
+        if repeatPassword != user.password:
+            flash('Incorrect password', 'password_err')
+
+        user = User(username=username, first_name=firstname, last_name=lastname, email=email,password=password)
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('profile', user_id=user.id))
+
+
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
