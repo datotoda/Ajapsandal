@@ -24,7 +24,7 @@
             {% for comment in joke.comments %}
                 <div class="list-group-item d-flex align-items-start">
                     <div class="ms-2 me-auto">
-                        <a href="#" class="fw-bold link-dark">{{ comment.author }}</a>
+                        <a href="{{ url_for('profile', user_id=comment.author.id) }}" class="fw-bold link-dark">{{ comment.author }}</a>
                         <div class="mt-2 mb-3">{{ comment.value }}</div>
                     </div>
                 </div>

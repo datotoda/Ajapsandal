@@ -13,7 +13,7 @@
                 <div class="col-sm-6 text-black">
 
                     <div class="d-flex align-items-center h-custom-2 px-5 ms-xl-4 mt-5 pt-5 pt-xl-0 mt-xl-n5"
-                    style="height: 80%">
+                         style="height: 80%">
 
                         <form style="width: 23rem;" method="post">
 
@@ -21,9 +21,10 @@
 
                             <div class="form-outline mb-4">
                                 <label class="form-label" for="username">Username</label>
-                                <input type="text" id="username" name="username" value="{{ username }}" class="form-control form-control-lg"/>
+                                <input type="text" id="username" name="username" value="{{ username }}"
+                                       class="form-control form-control-lg"/>
                                 {% for category, message in get_flashed_messages(with_categories=true) %}
-                                    {% if category == 'u_err' %}
+                                    {% if category == 'username_err' %}
                                         <div class="text-danger pt-2">{{ message }}</div>
                                     {% endif %}
                                 {% endfor %}
@@ -34,7 +35,7 @@
                                 <input type="password" id="password" name="password"
                                        class="form-control form-control-lg"/>
                                 {% for category, message in get_flashed_messages(with_categories=true) %}
-                                    {% if category == 'p_err' %}
+                                    {% if category == 'password_err' %}
                                         <div class="text-danger pt-2">{{ message }}</div>
                                     {% endif %}
                                 {% endfor %}
@@ -46,7 +47,8 @@
                                 </button>
                             </div>
 
-                            <p>Don't have an account? <a href="{{ url_for('registration') }}" style="color: forestgreen">Register
+                            <p>Don't have an account? <a href="{{ url_for('registration') }}"
+                                                         style="color: forestgreen">Register
                                 here</a></p>
 
                         </form>
