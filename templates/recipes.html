@@ -10,11 +10,14 @@
         {% for each in recipes %}
 
             <div class="col-sm-3 mb-5">
-                <div class="card" style="width: 18rem;">
+                <div class="card h-100" style="width: 18rem;">
                     <img src="{{ each['image'] }}" class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title"> {{ each['title'] }} </h5>
-                        <a href="{{ each['spoonacularSourceUrl'] }}" class="btn btn-primary">recipe</a>
+                        <p class="card-text">{{ each['summary']|striptags|truncate(100) }}</p>
+                    </div>
+                    <div class="card-footer ">
+                        <a href="{{ each['spoonacularSourceUrl'] }}" class="btn btn-primary" target="_blank">recipe</a>
                     </div>
                 </div>
             </div>
