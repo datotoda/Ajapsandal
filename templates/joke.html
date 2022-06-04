@@ -21,7 +21,7 @@
         <h2>Comments</h2>
 
         {% if joke.comments|count != 0 %}
-            <div class="list-group mt-4">
+            <div class="list-group mt-4 {% if not user %}mb-5{% endif %}">
                 {% for comment in joke.comments %}
                     <div class="list-group-item d-flex align-items-start">
                         <div class="ms-2 me-auto">

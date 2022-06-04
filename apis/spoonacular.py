@@ -12,7 +12,6 @@ def get_offline_receipts(number=10):
 
 def get_receipts(query, number=10):
     try:
-        0/0
         # spoonacular.com-იდან API-ს მეშვეობით მომაქვს ჩემთვის სასურველი კერძის რეცეპტი.
         key = '15d3f9db070e4b7980dd731441e1b04f'
         payload = {'apiKey': key, 'query': query, 'number': number}

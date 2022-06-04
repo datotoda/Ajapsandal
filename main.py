@@ -240,7 +240,7 @@ def joke(joke_id):
     joke_obj = Joke.query.filter_by(id=joke_id).first()
     user = User.query.filter_by(id=session.get('user_id', '')).first()
     if not joke_obj:
-        return 'error 404'
+        abort(404)
 
     if request.method == 'POST':
         comment = request.form.get('comment', '')
@@ -255,7 +255,7 @@ def joke(joke_id):
 @app.route('/newjoke')
 def newjoke():
     joke_json = chucknorris.get_random()
-    if len(Joke.query.filter_by(id=joke_json['id']).all()) == 0:
+    if not Joke.query.filter_by(id=joke_json['id']).first():
         joke_obj = Joke(**joke_json)
         db.session.add(joke_obj)
         db.session.commit()
