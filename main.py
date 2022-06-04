@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, abort
 from flask.views import MethodView
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug import exceptions
 from passlib.hash import sha256_crypt
 from datetime import datetime
 from apis import chucknorris, spoonacular
@@ -258,6 +259,11 @@ def newjoke():
         db.session.commit()
 
     return redirect(url_for('joke', joke_id=joke_json['id']))
+
+
+@app.errorhandler(exceptions.NotFound)
+def handle_not_found(e):
+    return render_template('errors/error_404.html'), 404
 
 
 if __name__ == '__main__':
