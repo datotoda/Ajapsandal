@@ -71,7 +71,7 @@ def verify_password(password, password_hash):
 @app.route('/')
 def index():
     foods = spoonacular.get_offline_receipts(30)
-    return render_template('recipes.html', recipes=foods)
+    return render_template('recipe/recipes.html', recipes=foods)
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -88,7 +88,7 @@ def login():
         if not password:
             flash('Input password', 'password_err')
         if not (username and password):
-            return render_template('login.html', username=username)
+            return render_template('auth/login.html', username=username)
 
         user = User.query.filter_by(username=username).first()
 
@@ -98,12 +98,12 @@ def login():
 
         if not verify_password(password, user.password):
             flash('Incorrect password', 'password_err')
-            return render_template('login.html', username=username)
+            return render_template('auth/login.html', username=username)
 
         session['user_id'] = user.id
         return redirect(url_for('profile', user_id=user.id))
 
-    return render_template('login.html')
+    return render_template('auth/login.html')
 
 
 @app.route('/logout')
@@ -132,18 +132,18 @@ def registration():
         if not data['password']:
             flash('Input password', 'password_err')
         if not (data['username'] and data['password']):
-            return render_template('registration.html', **data)
+            return render_template('auth/registration.html', **data)
 
         if User.query.filter_by(username=data['username']).first():
             flash('username already exists', 'username_err')
             data.pop('username')
-            return render_template('registration.html', **data)
+            return render_template('auth/registration.html', **data)
         if len(data['password']) < 8:
             flash('Password must be at least 8 characters long', 'password_err')
-            return render_template('registration.html', **data)
+            return render_template('auth/registration.html', **data)
         if data['repeat_password'] != data['password']:
             flash('Passwords not match', 'repeat_password_err')
-            return render_template('registration.html', **data)
+            return render_template('auth/registration.html', **data)
 
         data.pop('repeat_password')
         data['password'] = hash_password(data['password'])
@@ -153,7 +153,7 @@ def registration():
         session['user_id'] = user.id
         return redirect(url_for('profile', user_id=user.id))
 
-    return render_template('registration.html')
+    return render_template('auth/registration.html')
 
 
 class UserMethodView(MethodView):
@@ -166,8 +166,10 @@ class UserMethodView(MethodView):
             abort(404)
 
         is_editable = user.id == session.get('user_id', '')
+        if edit and not is_editable:
+            return redirect(url_for('profile', user_id=user_id, edit=False))
 
-        return render_template('profile.html', user=user, is_editable=is_editable, edit=edit)
+        return render_template('auth/profile.html', user=user, is_editable=is_editable, edit=edit)
 
     def post(self, user_id, edit):
         if user_id != session.get('user_id', ''):
@@ -224,13 +226,13 @@ def recipes():
         foods = spoonacular.get_receipts(food_name)
     else:
         foods = spoonacular.get_offline_receipts()
-    return render_template('recipes.html', recipes=foods)
+    return render_template('recipe/recipes.html', recipes=foods)
 
 
 @app.route('/jokes')
 def jokes():
     jokes_list = Joke.query.all()
-    return render_template('jokes.html', jokes=jokes_list)
+    return render_template('joke/jokes.html', jokes=jokes_list)
 
 
 @app.route('/joke/<string:joke_id>', methods=['GET', 'POST'])
@@ -247,7 +249,7 @@ def joke(joke_id):
             db.session.add(new_comment)
             db.session.commit()
 
-    return render_template('joke.html', joke=joke_obj, user=user)
+    return render_template('joke/joke.html', joke=joke_obj, user=user)
 
 
 @app.route('/newjoke')
