@@ -216,8 +216,9 @@ class UserMethodView(MethodView):
 
 
 user_view = UserMethodView.as_view('profile')
-app.add_url_rule('/profile/<int:user_id>', view_func=user_view, defaults={'edit': False}, methods=['GET',])
+app.add_url_rule('/profile/<int:user_id>', view_func=user_view, defaults={'edit': False}, methods=['GET'])
 app.add_url_rule('/profile/<int:user_id>/edit', view_func=user_view, defaults={'edit': True})
+
 
 @app.route('/recipes')
 def recipes():
