@@ -156,7 +156,7 @@ def registration():
 
 
 class UserMethodView(MethodView):
-    def get(self, user_id):
+    def get(self, user_id, edit):
         if user_id is None:
             return redirect(url_for('login'))
 
@@ -166,13 +166,9 @@ class UserMethodView(MethodView):
 
         is_editable = user.id == session.get('user_id', '')
 
-        edit = False
-        if request.args.get('edit', ''):
-            edit = is_editable
-
         return render_template('profile.html', user=user, is_editable=is_editable, edit=edit)
 
-    def post(self, user_id):
+    def post(self, user_id, edit):
         if user_id != session.get('user_id', ''):
             return redirect(url_for('profile', user_id=user_id))
 
@@ -213,11 +209,12 @@ class UserMethodView(MethodView):
                 user.password = hash_password(new_pass)
 
         db.session.commit()
-        return redirect(url_for('profile', user_id=user_id))
+        return redirect(url_for('profile', user_id=user_id, edit=edit))
 
 
-app.add_url_rule('/profile/<int:user_id>', view_func=UserMethodView.as_view('profile'))
-
+user_view = UserMethodView.as_view('profile')
+app.add_url_rule('/profile/<int:user_id>', view_func=user_view, defaults={'edit': False}, methods=['GET',])
+app.add_url_rule('/profile/<int:user_id>/edit', view_func=user_view, defaults={'edit': True})
 
 @app.route('/recipes')
 def recipes():
