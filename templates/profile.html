@@ -7,18 +7,22 @@
 {% block context %}
     <div class="col-8 mx-auto">
 
-        {% if is_editable and not edit %}
-            <form class="mt-4 mb-5" method="get">
-                <div class="row g-3">
-                    <div class="col">
-                        <p class="h2">Hello {{ user.username }}</p>
-                    </div>
-                    <div class="col-auto">
-                        <input type="hidden" name="edit" value="True">
-                        <button type="submit" class="btn btn-outline-warning">Edit</button>
-                    </div>
+        {% if is_editable %}
+            <div class="mt-4 mb-5 row g-3">
+            {% if edit %}
+                <div class="col">
+                    <a href="{{ url_for('profile', user_id=user.id) }}" class="btn btn-outline-secondary">Back</a>
                 </div>
-            </form>
+
+            {% else %}
+                <div class="col">
+                    <p class="h2">Hello {{ user.username }}</p>
+                </div>
+                <div class="col-auto">
+                    <a href="{{ url_for('profile', user_id=user.id) }}/edit" class="btn btn-outline-warning">Edit</a>
+                </div>
+            {% endif %}
+            </div>
         {% endif %}
 
         <form class="mt-5" method="post">
