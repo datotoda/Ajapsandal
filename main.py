@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, abort
 from flask.views import MethodView
 from flask_sqlalchemy import SQLAlchemy
+from passlib.hash import sha256_crypt
 from datetime import datetime
 from apis import chucknorris, spoonacular
 
@@ -58,6 +59,14 @@ class User(db.Model):
         return str(self)
 
 
+def hash_password(password):
+    return sha256_crypt.hash(password)
+
+
+def verify_password(password, password_hash):
+    return sha256_crypt.verify(password, password_hash)
+
+
 @app.route('/')
 def index():
     foods = spoonacular.get_offline_receipts(30)
@@ -86,7 +95,7 @@ def login():
             flash('Incorrect username', 'username_err')
             return redirect(url_for('login'))
 
-        if user.password != password:
+        if not verify_password(password, user.password):
             flash('Incorrect password', 'password_err')
             return render_template('login.html', username=username)
 
@@ -136,6 +145,7 @@ def registration():
             return render_template('registration.html', **data)
 
         data.pop('repeat_password')
+        data['password'] = hash_password(data['password'])
         user = User(**data)
         db.session.add(user)
         db.session.commit()
@@ -189,7 +199,7 @@ class UserMethodView(MethodView):
                 user.email = email
 
         if old_pass or new_pass or conf_pass:
-            if user.password != old_pass:
+            if not verify_password(old_pass, user.password):
                 flash('Incorrect password', 'old_pass_err')
             elif new_pass != conf_pass:
                 flash('Passwords not match', 'conf_pass_err')
@@ -200,7 +210,7 @@ class UserMethodView(MethodView):
             elif old_pass == new_pass:
                 flash('This is old password', 'new_pass_err')
             else:
-                user.password = new_pass
+                user.password = hash_password(new_pass)
 
         db.session.commit()
         return redirect(url_for('profile', user_id=user_id))
