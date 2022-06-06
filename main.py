@@ -101,7 +101,7 @@ def login():
             return render_template('auth/login.html', username=username)
 
         session['user_id'] = user.id
-        return redirect(url_for('profile', user_id=user.id))
+        return redirect(url_for('profile', user_id=user.id, edit=False))
 
     return render_template('auth/login.html')
 
@@ -151,7 +151,7 @@ def registration():
         db.session.add(user)
         db.session.commit()
         session['user_id'] = user.id
-        return redirect(url_for('profile', user_id=user.id))
+        return redirect(url_for('profile', user_id=user.id, edit=False))
 
     return render_template('auth/registration.html')
 
@@ -173,7 +173,8 @@ class UserMethodView(MethodView):
 
     def post(self, user_id, edit):
         if user_id != session.get('user_id', ''):
-            return redirect(url_for('profile', user_id=user_id))
+            return redirect(url_for('profile', user_id=user_id, edit=False))
+
 
         user = User.query.filter_by(id=user_id).first()
 
