@@ -31,7 +31,7 @@
                 {% if 'user_id' in session %}
                     <li class="nav-item">
                         <a class="nav-link"
-                           href="{{ url_for('profile', user_id=session['user_id']) }}">Profile</a>
+                           href="{{ url_for('profile', user_id=session['user_id'], edit=False) }}">Profile</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
