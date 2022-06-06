@@ -7,7 +7,7 @@ from datetime import datetime
 from apis import chucknorris, spoonacular
 
 app = Flask(__name__)
-app.secret_key = 'text'
+app.secret_key = 'dzalian_gasaidumloebuli_gasagebi'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
@@ -272,4 +272,4 @@ def handle_not_found(e):
 
 if __name__ == '__main__':
     db.create_all()
-    app.run(debug=True)
+    app.run()
