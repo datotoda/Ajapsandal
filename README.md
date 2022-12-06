@@ -37,3 +37,11 @@ $ pip install -r requirements.txt
 ```bash
 $ python main.py
 ```
+
+## Docker
+
+[Docker hub](https://hub.docker.com/r/datotoda/ajapsandal)
+
+```bash 
+docker run -d -p 80:5000 datotoda/ajapsandal
+```
